@@ -6,6 +6,7 @@ namespace softcommerce\knob;
 use yii\base\Widget;
 use yii\helpers\Html;
 use yii\helpers\Json;
+use yii\helpers\ArrayHelper;
 
 class Knob extends Widget
 {
@@ -36,13 +37,7 @@ class Knob extends Widget
             KnobIconAsset::register($view);
             $pluginsJs .= "addKnobIcon('#{$this->options['id']}', '".addslashes($this->icon)."');\n";
         }
-        if( $this->knobOptions['format'] )
-        {
-            $format = $this->knobOptions['format'];
-            unset( $this->knobOptions['format'] );
-        } else {
-            $format = false;
-        }
+        $format = ArrayHelper::remove($this->knobOptions, 'format', false);
         $knobOptions = empty($this->knobOptions) ? '' : Json::encode($this->knobOptions);
         $js = !$format ? "jQuery('#{$this->options['id']}').knob({$knobOptions});\n" : "jQuery('#{$this->options['id']}').knob( jQuery.extend({$knobOptions},{format: {$format}}));\n";
         $js .= $pluginsJs;
